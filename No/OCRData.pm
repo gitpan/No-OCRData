@@ -157,7 +157,7 @@ Alle datoer blir transformert fra formen DDMMYY (bare de to siste tallene i årst
 
 =item * 
 
-Ledende nuller fra felter som ikke er en KODE eller en TYPE fjernes.
+Ledende nuller fra felter som ikke er en KONTO, en KODE eller en TYPE fjernes.
 
 =item * 
 
@@ -166,6 +166,10 @@ Alle beløper er i øre i fila, og deles på hundre for å gjøres om til kroner.
 =item * 
 
 Tomme felter fjernes (dette inkluderer felter som kun hadde nuller). 
+
+=item * 
+
+DEBET_KONTO og POSTGIROKONTO fjernes hvis den kun inneholdt nuller. 
 
 =back
 
@@ -187,10 +191,18 @@ sub reduce {
                                    . '-' . substr(${$record}{$key},2,2)
                                    . '-' . substr(${$record}{$key},0,2);
             }
-            unless (($key =~ m/KODE/) || ($key =~ m/TYPE/))
+            unless (($key =~ m/KODE/) || ($key =~ m/TYPE/) || ($key =~ m/KONTO/))
             {
-                # Fjern 0 fra starten av felt som ikke er en KODE eller TYPE
+                # Fjern 0 fra starten av felt som ikke er en KODE, TYPE eller KONTO
 		${$record}{$key} =~ s/^0*//; 
+            }
+            unless (${$record}{'DEBET_KONTO'} =~ m/[1-9]/)
+            {
+		delete ${$record}{'DEBET_KONTO'};
+            }
+            unless (${$record}{'POSTGIROKONTO'} =~ m/[1-9]/)
+            {
+		delete ${$record}{'POSTGIROKONTO'};
             }
             if ($key =~ m/BELOP/) {
 		# Alle beloeper er i oere og deles derfor paa hundre
