@@ -17,7 +17,7 @@ require Exporter;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = sprintf("%d.%02d", q$Revision: 0.9 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 0.91 $ =~ /(\d+)\.(\d+)/);
 
 
 =head1 NAME
